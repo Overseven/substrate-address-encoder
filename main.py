@@ -8,12 +8,14 @@ def remove_prefix(text, prefix):
     return text
 
 
+# return first two bytes from hash of 'SS58PRE' + address prefix + address
 def blake2(data):
     hash = hashlib.blake2b(digest_size=64)
     hash.update(bytes.fromhex('53533538505245') + data)
     return hash.digest()[:2]
 
 
+# encode hex public key
 def encode_public_key(key, prefix):
     if prefix < 64:
         encoded = bytes([prefix])
@@ -26,6 +28,7 @@ def encode_public_key(key, prefix):
     return encoded, encoded_str
 
 
+# main function to encode hex and base58 addresses with new prefix
 def reencode_address(address, prefix):
     try:
         add_bytes = base58.b58decode(address)
@@ -61,6 +64,7 @@ def reencode_address(address, prefix):
     return encoded_str
 
 
+# examples of usage
 reencode_address('5ERTCNpBJe6tKGBA1ZWXi6CkFRFdHX4mogf2rFQhiVRUtXgT', 67)  # Genshiro: cZh5bjGbjxm7QQE3FFA8XiYhBMbMsYP2ZFyRh6u27nnJtqrfa
 reencode_address('cZh5bjGbjxm7QQE3FFA8XiYhBMbMsYP2ZFyRh6u27nnJtqrfa', 2)  # Kusama: Ew4rhA3w17p4uzbnGKac3ZkQ1Xs6BsxG4VnEugfCHdydYf4
 reencode_address('13MkLi5FARNMkoBfyCZXrF2u73FGypcutBPX1YQ4GaT14vbm', 67)  # Genshiro: cZh5bjGbjxm7QQE3FFA8XiYhBMbMsYP2ZFyRh6u27nnJtqrfa
